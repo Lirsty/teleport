@@ -34,15 +34,10 @@ public class TpPlayer {
                         return true;
                     }
                     String name = player.getName();
+                    TpaMap.put(targetPlayer, player);
                     player.sendMessage("發出了傳送請求給" + targetPlayer.getName());
                     targetPlayer.sendMessage(name + "想傳送到你的位置");
-                    TpaMap.put(targetPlayer, player);
-                    Timer timer = new Timer();
-                    TimerMap.put(targetPlayer, timer);
-                    TpRequestClearer clearer = new TpRequestClearer();
-                    clearer.setPlayer(targetPlayer);
-                    clearer.setMap(handleMem);
-                    timer.schedule(clearer, 20000);
+                    DelayClearTP(targetPlayer);
                 } else {
                     player.sendMessage("該玩家不在線上");
                 }
@@ -70,15 +65,10 @@ public class TpPlayer {
                         return true;
                     }
                     String name = player.getName();
+                    TpaHereMap.put(targetPlayer, player);
                     player.sendMessage("發出了傳送請求給" + targetPlayer.getName());
                     targetPlayer.sendMessage(name + "想傳送你至 他 的位置");
-                    TpaHereMap.put(targetPlayer, player);
-                    Timer timer = new Timer();
-                    TimerMap.put(targetPlayer, timer);
-                    TpRequestClearer clearer = new TpRequestClearer();
-                    clearer.setPlayer(targetPlayer);
-                    clearer.setMap(handleMem);
-                    timer.schedule(clearer, 20000);
+                    DelayClearTP(targetPlayer);
                 } else {
                     player.sendMessage("該玩家不在線上");
                 }
@@ -99,21 +89,29 @@ public class TpPlayer {
                     TpaMap.remove(player);
                     TimerMap.get(player).cancel();
                     return true;
-                } else {
-                    // tpahere
-                    targetPlayer = TpaHereMap.get(player);
-                    if (targetPlayer != null) {
-                        player.sendMessage("你接受了傳送請求");
-                        player.teleportAsync(targetPlayer.getLocation());
-                        TpaHereMap.remove(player);
-                        TimerMap.get(player).cancel();
-                        return true;
-                    }
+                }
+                // tpahere
+                targetPlayer = TpaHereMap.get(player);
+                if (targetPlayer != null) {
+                    player.sendMessage("你接受了傳送請求");
+                    player.teleportAsync(targetPlayer.getLocation());
+                    TpaHereMap.remove(player);
+                    TimerMap.get(player).cancel();
+                    return true;
                 }
                 player.sendMessage("目前沒有傳送請求");
             }
         }
         return false;
+    }
+
+    private void DelayClearTP(Player targetPlayer) {
+        Timer timer = new Timer();
+        TimerMap.put(targetPlayer, timer);
+        TpRequestClearer clearer = new TpRequestClearer();
+        clearer.setPlayer(targetPlayer);
+        clearer.setMap(handleMem);
+        timer.schedule(clearer, 20000);
     }
 
     public class HandleMem{
