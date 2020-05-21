@@ -1,0 +1,17 @@
+name: Teleport
+version: 1.0-SNAPSHOT
+main: lirsty.teleport.Teleport
+api-version: 1.13
+authors: [Lirsty]
+description: This plugin contains /tpa, /back, /home,... commands.
+website: github.com/Lirsty
+commands:
+  tpa:
+    description: tp to player's location
+    usage: /<command>
+  tpahere:
+    description: tp player to your location
+    usage: /<command>
+  tok:
+    description: accept tp request
+    usage: /<command>
